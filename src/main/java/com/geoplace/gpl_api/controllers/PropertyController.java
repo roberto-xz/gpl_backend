@@ -5,21 +5,24 @@ import org.springframework.web.bind.annotation.*;
 
 import com.geoplace.gpl_api.dtos.property.CreatePropertyRequestDto;
 import com.geoplace.gpl_api.services.PropertyService;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/geoplace/api")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PropertyController {
-    
     @Autowired
     PropertyService property;
 
-    @PostMapping("/property")
-    public Object create_(@RequestBody CreatePropertyRequestDto req) {
-        return this.property.createProperty(req);
+    @PostMapping(value = "/property", consumes = "multipart/form-data")
+    public Object create_(
+            @RequestPart("data") CreatePropertyRequestDto req,
+            @RequestParam("images") MultipartFile[] images
+    ) {
+        return this.property.createProperty(req,images);
     }
 
-    @GetMapping("/properties")
+    @GetMapping("/properties" )
     public  Object listAll() {
         return this.property.getAllProperty();
     }

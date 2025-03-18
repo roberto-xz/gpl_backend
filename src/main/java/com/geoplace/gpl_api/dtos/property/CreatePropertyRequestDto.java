@@ -2,7 +2,6 @@
 package com.geoplace.gpl_api.dtos.property;
 import lombok.Data;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 public class CreatePropertyRequestDto {
@@ -27,6 +26,4 @@ public class CreatePropertyRequestDto {
     private Short kitchens;  // cozinhas
     private Short parkingSpaces;
     private Double area;
-
-    private List<String> imageUrls;
 }
