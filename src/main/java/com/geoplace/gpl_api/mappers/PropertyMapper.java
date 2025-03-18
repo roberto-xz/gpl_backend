@@ -1,10 +1,12 @@
 package com.geoplace.gpl_api.mappers;
 
 import com.geoplace.gpl_api.dtos.property.CreatePropertyRequestDto;
-import com.geoplace.gpl_api.dtos.property.PropertyCardResponseDto;
+import com.geoplace.gpl_api.dtos.property.PropertyGetAllResponseDto;
+import com.geoplace.gpl_api.dtos.property.PropertyGetResponseDto;
 import com.geoplace.gpl_api.models.PropertyImageModel;
 import com.geoplace.gpl_api.models.PropertyModel;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,18 +35,32 @@ public class PropertyMapper {
         return output;
     }
 
-    public List<PropertyCardResponseDto> modelListToCardList(List<PropertyModel> models) {
-        List<PropertyCardResponseDto>  cards = new ArrayList<>();
+    public List<PropertyGetAllResponseDto> modelListToPropertyGetAllResponseDto(List<PropertyModel> models) {
+        List<PropertyGetAllResponseDto>  cards = new ArrayList<>();
         if (models.isEmpty()) return null;
 
         models.forEach(model -> {
-            PropertyCardResponseDto card_temp = new PropertyCardResponseDto();
+            PropertyGetAllResponseDto card_temp = new PropertyGetAllResponseDto();
             BeanUtils.copyProperties(model,card_temp);
             card_temp.setCover(model.getImages().get(0).getImageUrl());
             cards.add(card_temp);
         });
 
         return  cards;
+    }
+
+    public PropertyGetResponseDto modelToPropertyGetResponseDto(PropertyModel model) {
+        PropertyGetResponseDto resp = new PropertyGetResponseDto();
+        BeanUtils.copyProperties(model,resp, "images");
+        List<String> temp_images = new ArrayList<>();
+
+        model.getImages().forEach(img ->{
+            temp_images.add(img.getImageUrl());
+        });
+
+        resp.setCover(temp_images.get(0));
+        resp.setImages(temp_images);
+        return resp;
     }
 }
 

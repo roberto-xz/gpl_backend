@@ -1,6 +1,7 @@
 
 package com.geoplace.gpl_api.services;
 
+import com.geoplace.gpl_api.dtos.property.PropertyGetResponseDto;
 import com.geoplace.gpl_api.mappers.PropertyMapper;
 import com.geoplace.gpl_api.models.PropertyModel;
 import com.geoplace.gpl_api.models.UserModel;
@@ -12,6 +13,7 @@ import com.geoplace.gpl_api.repositories.PropertyRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +38,19 @@ public class PropertyService {
     public Object getAllProperty(){
         List<PropertyModel> properties = this.propertyRepository.findAll();
         PropertyMapper mapper = new PropertyMapper();
-        return mapper.modelListToCardList(properties);
+        return mapper.modelListToPropertyGetAllResponseDto(properties);
+    }
+
+    public Object getProperty(Long propertyId){
+        Optional<PropertyModel> property = this.propertyRepository.findById(propertyId);
+
+        if (property.isPresent()) {
+            PropertyMapper mapper = new PropertyMapper();
+            PropertyGetResponseDto resp = mapper.modelToPropertyGetResponseDto(property.get());
+
+            return resp;
+        }
+        return null;
     }
 
     private UserModel findAndValidUser(String userToken) {

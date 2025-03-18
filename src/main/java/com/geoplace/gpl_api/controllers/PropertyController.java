@@ -23,4 +23,9 @@ public class PropertyController {
     public  Object listAll() {
         return this.property.getAllProperty();
     }
+
+    @GetMapping("/property/{property_id}")
+    public Object getProperty(@PathVariable Long property_id){
+        return this.property.getProperty(property_id);
+    }
 }
